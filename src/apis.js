@@ -83,3 +83,22 @@ export const addSubscriptionHandler = async ({
     return false;
   }
 };
+
+export const removeSubscriptionHandler = async ({ email, title }) => {
+  try {
+    const res = await axios.post(baseUrl + "/remove_subscription", {
+      email: email,
+      title: title,
+    });
+    console.log("REMOVE: ", res);
+
+    if (res.data && res.data.message === "Subscription removed") {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};

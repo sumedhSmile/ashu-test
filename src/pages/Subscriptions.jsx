@@ -12,7 +12,7 @@ import {
   Typography,
   Avatar,
 } from "@mui/material";
-import { getSubscriptionHandler } from "../apis";
+import { getSubscriptionHandler, removeSubscriptionHandler } from "../apis";
 function Subscriptions() {
   const [searchQuery, setSearchQuery] = useState("");
   const [subscribedSongs, setSubscribedSongs] = useState([]);
@@ -32,18 +32,22 @@ function Subscriptions() {
     fetchSubscriptions();
   }, []);
 
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
-  const handleSubscribe = (song) => {
-    if (!subscribedSongs.some((s) => s.id === song.id)) {
-      setSubscribedSongs([...subscribedSongs, song]);
-    }
-  };
-
-  const handleUnsubscribe = (songId) => {
+  const handleUnsubscribe = async (song) => {
+    const songId = song.id;
+    const title = song.title;
+    const userdetailsStore = localStorage.getItem("userdetails");
+    const email = JSON.parse(userdetailsStore)?.email;
     setSubscribedSongs(subscribedSongs.filter((song) => song.id !== songId));
+    try {
+      const response = await removeSubscriptionHandler({ email, title });
+      if (response) {
+        alert("Song removed from subscription");
+      } else {
+        alert("Error removing song from subscription");
+      }
+    } catch (error) {
+      console.log("Error removing subscription: ", error);
+    }
   };
 
   return (
@@ -91,7 +95,7 @@ function Subscriptions() {
                     variant="outlined"
                     color="error"
                     size="small"
-                    onClick={() => handleUnsubscribe(song.id)}
+                    onClick={() => handleUnsubscribe(song)}
                     sx={{ borderRadius: 2 }}
                   >
                     Remove
