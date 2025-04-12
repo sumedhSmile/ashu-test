@@ -9,7 +9,7 @@ import {
   Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { loginHandler } from "../apis";
+import { loginHandler, registerHandler } from "../apis";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -47,6 +47,13 @@ const AuthForm = () => {
         navigate("/dashboard");
       } else {
         alert("Invalid Credentials");
+      }
+    } else {
+      const response = await registerHandler(payload);
+      if (response) {
+        navigate("/dashboard");
+      } else {
+        alert("Please use a different email or username");
       }
     }
 
