@@ -9,6 +9,7 @@ import {
   CardContent,
 } from "@mui/material";
 import axios from "axios";
+import { addSubscriptionHandler } from "../apis";
 
 const SearchSection = () => {
   const [title, setTitle] = useState("");
@@ -35,13 +36,29 @@ const SearchSection = () => {
         requestBody
       );
       console.log("response: ", response.data.results);
-      // Make the API call using Axios or your preferred HTTP library
-      // Assuming response data is the array of songs
+
       setSongs(response.data.results);
     } catch (error) {
       setSongs([]);
 
       console.error("Error fetching songs:", error);
+    }
+  };
+
+  const handleAddSubscription = async (song) => {
+    try {
+      const userdetails = JSON.parse(localStorage.getItem("userdetails"));
+      const username = userdetails.email;
+      console.log("song: ", { ...song, username });
+
+      const response = await addSubscriptionHandler({ ...song, username });
+      if (response) {
+        alert("Song added to subscription");
+      } else {
+        alert("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error adding subscription:", error);
     }
   };
   return (
@@ -124,6 +141,14 @@ const SearchSection = () => {
                     />
                     <Typography variant="h6">{song.title}</Typography>
                     <Typography color="textSecondary">{song.artist}</Typography>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleAddSubscription(song)}
+                      sx={{ width: "100%", mt: 2 }}
+                    >
+                      Add to Subscription
+                    </Button>
                   </CardContent>
                 </Card>
               </Grid>

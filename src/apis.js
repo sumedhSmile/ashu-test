@@ -64,7 +64,7 @@ export const addSubscriptionHandler = async ({
   img_url,
 }) => {
   try {
-    const res = await axios.post(baseUrl + "/version_1/add_subscription", {
+    const res = await axios.post(baseUrl + "/add_subscription", {
       username: username,
       title: title,
       artist: artist,
@@ -72,7 +72,8 @@ export const addSubscriptionHandler = async ({
       img_url: img_url,
     });
 
-    if (res.data && res.data.message === "Subscription added successfully") {
+    console.log("ADD: ", res);
+    if (res.data && res.data.message === "Subscribed successfully") {
       return true;
     } else {
       return false;
