@@ -22,14 +22,18 @@ export const loginHandler = async ({ email, password }) => {
   }
 };
 
-export const registerHandler = async ({ username, email, password }) => {
+export const registerHandler = async ({ user_name, email, password }) => {
   try {
     const res = await axios.post(baseUrl + "/register", {
-      user_name: username,
       email: email,
       password: password,
+      user_name: user_name,
     });
     if (res.data.message === "Registration successful") {
+      localStorage.setItem(
+        "userdetails",
+        JSON.stringify({ username: user_name, email: email })
+      );
       return true;
     } else {
       return false;

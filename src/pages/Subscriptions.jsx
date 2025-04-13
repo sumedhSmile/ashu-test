@@ -37,7 +37,12 @@ function Subscriptions() {
     const title = song.title;
     const userdetailsStore = localStorage.getItem("userdetails");
     const email = JSON.parse(userdetailsStore)?.email;
-    setSubscribedSongs(subscribedSongs.filter((song) => song.id !== songId));
+
+    setSubscribedSongs(
+      subscribedSongs.filter((item) => {
+        return item.title !== title;
+      })
+    );
     try {
       const response = await removeSubscriptionHandler({ email, title });
       if (response) {

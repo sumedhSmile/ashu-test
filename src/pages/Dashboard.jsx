@@ -22,6 +22,7 @@ import Subscriptions from "./Subscriptions";
 
 const Dashboard = () => {
   const [tabValue, setTabValue] = useState(0);
+  const [userdetails, setUserdetails] = useState(null);
 
   const navigate = useNavigate();
 
@@ -31,6 +32,7 @@ const Dashboard = () => {
       if (!userdetailsStore) {
         navigate("/");
       }
+      setUserdetails(JSON.parse(userdetailsStore));
     };
     fetchDetails();
   }, []);
@@ -55,7 +57,15 @@ const Dashboard = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Music Dashboard
           </Typography>
+
           <IconButton color="inherit">
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1, fontWeight: "bold", marginRight: "20px" }}
+            >
+              {userdetails && userdetails.username}{" "}
+            </Typography>
             <Person />
           </IconButton>
         </Toolbar>
